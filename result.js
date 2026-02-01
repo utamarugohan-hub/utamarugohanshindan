@@ -1,3 +1,6 @@
+// Google Apps Script のウェブアプリURL
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7QNBsN7SHiUaWYeGGAwLF6FP3XAYC_st0kgYHDXSzgTHTK9YBkaqMlVWYTD8DVYE0RQ/exec';
+
 // 診断結果データ
 const results = {
     'freezing-baby': {
@@ -18,8 +21,8 @@ const results = {
         ],
         bookTitle: 'うたまるごはんのかんたんフリージング離乳食・幼児食',
         links: [
-            { text: '楽天市場はこちら', url: 'https://a.r10.to/hPOKvX' },
-            { text: 'Amazonはこちら', url: 'https://www.amazon.co.jp/dp/4058017767' }
+            { text: '楽天市場はこちら', url: 'https://a.r10.to/hPOKvX', target: '楽天市場' },
+            { text: 'Amazonはこちら', url: 'https://www.amazon.co.jp/dp/4058017767', target: 'Amazon' }
         ]
     },
     'freezing-complete': {
@@ -40,7 +43,7 @@ const results = {
         ],
         bookTitle: 'うたまるごはんの完了期1週間フリージング',
         links: [
-            { text: '購入サイトはこちら', url: 'https://utamarugohan.base.shop' }
+            { text: '購入サイトはこちら', url: 'https://utamarugohan.base.shop', target: '購入サイト' }
         ]
     },
     'freezing-toddler': {
@@ -61,7 +64,7 @@ const results = {
         ],
         bookTitle: 'うたまるごはんの幼児食2週間フリージング',
         links: [
-            { text: '購入サイトはこちら', url: 'https://utamarugohan.base.shop/categories/6926213' }
+            { text: '購入サイトはこちら', url: 'https://utamarugohan.base.shop/categories/6926213', target: '購入サイト' }
         ]
     },
     'toriwake': {
@@ -82,8 +85,8 @@ const results = {
         ],
         bookTitle: 'うたまるごはんのかんたん親子ごはん',
         links: [
-            { text: '楽天市場はこちら', url: 'https://a.r10.to/hg0cQl' },
-            { text: 'Amazonはこちら', url: 'https://www.amazon.co.jp/dp/4058020245' }
+            { text: '楽天市場はこちら', url: 'https://a.r10.to/hg0cQl', target: '楽天市場' },
+            { text: 'Amazonはこちら', url: 'https://www.amazon.co.jp/dp/4058020245', target: 'Amazon' }
         ]
     },
     'kondate': {
@@ -105,18 +108,34 @@ const results = {
         ],
         bookTitle: 'うたまるごはんの平日らくちん親子献立',
         links: [
-            { text: '楽天市場はこちら', url: 'https://a.r10.to/hgwpK5' },
-            { text: 'Amazonはこちら', url: 'https://amzn.asia/d/89ZKtH2' }
+            { text: '楽天市場はこちら', url: 'https://a.r10.to/hgwpK5', target: '楽天市場' },
+            { text: 'Amazonはこちら', url: 'https://amzn.asia/d/89ZKtH2', target: 'Amazon' }
         ]
     }
 };
+
+// グローバル変数
+let currentResultType = '';
+let currentBookTitle = '';
+let hasClickedLink = false;
 
 // ページ読み込み時に診断結果を表示
 window.addEventListener('DOMContentLoaded', () => {
     const answers = JSON.parse(localStorage.getItem('quizAnswers'));
     const resultType = determineResult(answers);
+    currentResultType = resultType;
     displayResult(resultType);
+    
+    // 診断完了を記録（クリック無し）
     trackDiagnosis(resultType);
+    
+    // ページを離れる前にクリックしていない場合の処理
+    window.addEventListener('beforeunload', () => {
+        if (!hasClickedLink) {
+            // クリック無しを記録（同期処理）
+            navigator.sendBeacon(GOOGLE_APPS_SCRIPT_URL, createTrackingData('クリック無し'));
+        }
+    });
 });
 
 // 診断結果を判定する関数
@@ -178,6 +197,7 @@ function determineResult(answers) {
 // 診断結果を表示する関数
 function displayResult(resultType) {
     const result = results[resultType];
+    currentBookTitle = result.bookTitle;
 
     document.getElementById('resultType').textContent = result.type;
     document.getElementById('bookImage').src = result.image;
@@ -214,7 +234,10 @@ function displayResult(resultType) {
         a.className = 'purchase-link';
         a.textContent = link.text;
         a.target = '_blank';
-        a.addEventListener('click', () => trackClick(resultType, link.text));
+        a.addEventListener('click', (e) => {
+            hasClickedLink = true;
+            trackClick(link.target);
+        });
         linksContainer.appendChild(a);
     });
 }
@@ -225,14 +248,112 @@ function retryQuiz() {
     window.location.href = 'index.html';
 }
 
+// デバイスを判定する関数
+function getDevice() {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+        return 'タブレット';
+    }
+    if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+        return 'スマホ';
+    }
+    return 'PC';
+}
+
+// 地域とIPアドレスを取得する関数（非同期）
+async function getLocationData() {
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        return {
+            region: data.region || '不明',
+            ipAddress: data.ip || '不明'
+        };
+    } catch (error) {
+        return {
+            region: '不明',
+            ipAddress: '不明'
+        };
+    }
+}
+
+// トラッキングデータを作成する関数
+function createTrackingData(clickTarget) {
+    const now = new Date();
+    const timestamp = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    const device = getDevice();
+    
+    return JSON.stringify({
+        timestamp: timestamp,
+        resultType: results[currentResultType].type,
+        bookTitle: currentBookTitle,
+        clickTarget: clickTarget,
+        device: device,
+        region: '取得中',
+        ipAddress: '取得中'
+    });
+}
+
 // 診断完了時の記録（クリック無し）
-function trackDiagnosis(resultType) {
-    // TODO: Google Apps Script との連携
-    console.log('診断完了:', resultType, 'クリック無し');
+async function trackDiagnosis(resultType) {
+    const locationData = await getLocationData();
+    const now = new Date();
+    const timestamp = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    const device = getDevice();
+    
+    const data = {
+        timestamp: timestamp,
+        resultType: results[resultType].type,
+        bookTitle: results[resultType].bookTitle,
+        clickTarget: 'クリック無し',
+        device: device,
+        region: locationData.region,
+        ipAddress: locationData.ipAddress
+    };
+    
+    try {
+        await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        console.log('診断完了を記録しました:', data);
+    } catch (error) {
+        console.error('記録エラー:', error);
+    }
 }
 
 // 購入リンククリック時の記録
-function trackClick(resultType, linkText) {
-    // TODO: Google Apps Script との連携
-    console.log('クリック:', resultType, linkText);
+async function trackClick(clickTarget) {
+    const locationData = await getLocationData();
+    const now = new Date();
+    const timestamp = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    const device = getDevice();
+    
+    const data = {
+        timestamp: timestamp,
+        resultType: results[currentResultType].type,
+        bookTitle: currentBookTitle,
+        clickTarget: clickTarget,
+        device: device,
+        region: locationData.region,
+        ipAddress: locationData.ipAddress
+    };
+    
+    try {
+        await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        console.log('クリックを記録しました:', data);
+    } catch (error) {
+        console.error('記録エラー:', error);
+    }
 }
