@@ -7,31 +7,32 @@
 
 /* 全体のスタイル */
 body {
-    font-family: 'Zen Maru Gothic', sans-serif;
-    background: linear-gradient(135deg, #FFF5EB 0%, #FFE5CC 50%, #F5EBE0 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: linear-gradient(135deg, #f7f3f0 0%, #f0ebe5 50%, #ede7e0 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    color: #5A4A3A;
+    color: #8b7355;
 }
 
 .container {
     max-width: 600px;
     width: 100%;
-    background: #FFFFFF;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(255, 183, 128, 0.3);
+    background: rgba(255, 252, 248, 0.95);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(139, 115, 85, 0.15);
     overflow: hidden;
     min-height: 500px;
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(255, 252, 248, 0.3);
 }
 
 /* ヘッダー */
 header {
-    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
     padding: 30px 20px;
     text-align: center;
 }
@@ -39,14 +40,15 @@ header {
 header h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #5A4A3A;
+    color: #fefdfb;
     margin-bottom: 8px;
 }
 
 header .subtitle {
     font-size: 14px;
-    color: #7A6A5A;
+    color: #fefdfb;
     font-weight: 400;
+    opacity: 0.95;
 }
 
 /* メインコンテンツ */
@@ -61,18 +63,18 @@ main {
 
 /* スタート画面 */
 .intro-box {
-    background: linear-gradient(135deg, #FFF5EB 0%, #FFE5CC 100%);
+    background: #fefdfb;
     padding: 30px;
-    border-radius: 15px;
+    border-radius: 16px;
     margin-bottom: 30px;
-    border: 3px solid #FFD7B5;
+    border: 2px solid #d4c4b0;
     text-align: center;
 }
 
 .intro-text {
     font-size: 16px;
     line-height: 1.8;
-    color: #5A4A3A;
+    color: #8b7355;
     margin-bottom: 15px;
 }
 
@@ -81,8 +83,8 @@ main {
 }
 
 .start-btn {
-    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
-    color: #5A4A3A;
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+    color: #fefdfb;
     font-size: 20px;
     font-weight: 700;
     padding: 18px 60px;
@@ -90,24 +92,24 @@ main {
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(255, 183, 128, 0.4);
+    box-shadow: 0 5px 15px rgba(160, 145, 109, 0.3);
 }
 
 .start-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(255, 183, 128, 0.6);
+    box-shadow: 0 8px 20px rgba(160, 145, 109, 0.4);
 }
 
 /* プログレスバー */
 .progress-container {
     padding: 20px 30px;
-    background: #FFF5EB;
+    background: #fefdfb;
 }
 
 .progress-bar {
     width: 100%;
     height: 12px;
-    background: #F5EBE0;
+    background: #ede7e0;
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 10px;
@@ -115,7 +117,7 @@ main {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #FFD7B5 0%, #FFB380 100%);
+    background: linear-gradient(90deg, #c4a484 0%, #a0916d 100%);
     transition: width 0.3s ease;
     border-radius: 10px;
 }
@@ -124,7 +126,7 @@ main {
     text-align: center;
     font-size: 14px;
     font-weight: 500;
-    color: #7A6A5A;
+    color: #8b7355;
 }
 
 /* 質問画面 */
@@ -135,7 +137,7 @@ main {
 .question-title {
     font-size: 20px;
     font-weight: 700;
-    color: #5A4A3A;
+    color: #8b7355;
     margin-bottom: 30px;
     text-align: center;
     line-height: 1.6;
@@ -148,13 +150,13 @@ main {
 }
 
 .option-btn {
-    background: linear-gradient(135deg, #FFF5EB 0%, #FFE5CC 100%);
-    color: #5A4A3A;
+    background: #fefdfb;
+    color: #8b7355;
     font-size: 16px;
     font-weight: 500;
     padding: 20px 25px;
-    border: 3px solid #FFD7B5;
-    border-radius: 15px;
+    border: 2px solid #d4c4b0;
+    border-radius: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
@@ -162,8 +164,9 @@ main {
 }
 
 .option-btn:hover {
-    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
-    border-color: #FFB380;
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+    border-color: #a0916d;
+    color: #fefdfb;
     transform: translateX(5px);
 }
 
@@ -175,12 +178,12 @@ main {
 .result-type {
     font-size: 24px;
     font-weight: 700;
-    color: #5A4A3A;
+    color: #fefdfb;
     text-align: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
-    border-radius: 15px;
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+    border-radius: 16px;
 }
 
 .result-image {
@@ -191,24 +194,24 @@ main {
 .result-image img {
     max-width: 100%;
     height: auto;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(255, 183, 128, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(139, 115, 85, 0.2);
 }
 
 .result-content h3 {
     font-size: 18px;
     font-weight: 700;
-    color: #5A4A3A;
+    color: #8b7355;
     margin-top: 25px;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 3px solid #FFD7B5;
+    border-bottom: 2px solid #d4c4b0;
 }
 
 .result-content p {
     font-size: 16px;
     line-height: 1.8;
-    color: #5A4A3A;
+    color: #8b7355;
     margin-bottom: 20px;
 }
 
@@ -221,7 +224,7 @@ main {
 .result-content ul li {
     font-size: 16px;
     line-height: 1.8;
-    color: #5A4A3A;
+    color: #8b7355;
     padding-left: 25px;
     position: relative;
     margin-bottom: 10px;
@@ -236,7 +239,7 @@ main {
 .book-title {
     font-size: 18px;
     font-weight: 700;
-    color: #FFB380;
+    color: #a0916d;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -251,8 +254,8 @@ main {
 
 .purchase-link {
     display: block;
-    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
-    color: #5A4A3A;
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+    color: #fefdfb;
     font-size: 16px;
     font-weight: 700;
     padding: 15px 30px;
@@ -260,21 +263,21 @@ main {
     text-decoration: none;
     text-align: center;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(255, 183, 128, 0.4);
+    box-shadow: 0 5px 15px rgba(160, 145, 109, 0.3);
 }
 
 .purchase-link:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(255, 183, 128, 0.6);
+    box-shadow: 0 8px 20px rgba(160, 145, 109, 0.4);
 }
 
 .retry-btn {
-    background: linear-gradient(135deg, #F5EBE0 0%, #E5D5C0 100%);
-    color: #5A4A3A;
+    background: #fefdfb;
+    color: #8b7355;
     font-size: 16px;
     font-weight: 700;
     padding: 15px 40px;
-    border: 3px solid #FFD7B5;
+    border: 2px solid #d4c4b0;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -283,17 +286,20 @@ main {
 }
 
 .retry-btn:hover {
-    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+    color: #fefdfb;
+    border-color: #a0916d;
     transform: translateY(-3px);
 }
 
 /* フッター */
 footer {
-    background: #F5EBE0;
+    background: #fefdfb;
     padding: 20px;
     text-align: center;
     font-size: 14px;
-    color: #7A6A5A;
+    color: #8b7355;
+    border-top: 1px solid #d4c4b0;
 }
 
 footer p {
@@ -301,7 +307,7 @@ footer p {
 }
 
 footer a {
-    color: #FFB380;
+    color: #a0916d;
     text-decoration: none;
     font-weight: 500;
 }
