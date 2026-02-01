@@ -99,13 +99,21 @@ function showQuestion(index) {
     const optionsContainer = document.getElementById('optionsContainer');
     optionsContainer.innerHTML = '';
     
-    question.options.forEach(option => {
-        const button = document.createElement('button');
-        button.className = 'option-btn';
-        button.textContent = option.text;
-        button.addEventListener('click', () => selectOption(option.value));
-        optionsContainer.appendChild(button);
-    });
+    // 少し遅延してボタンを作成（アニメーション完了後）
+    setTimeout(() => {
+        question.options.forEach(option => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.textContent = option.text;
+            button.addEventListener('click', () => selectOption(option.value));
+            // タッチデバイス用のイベントハンドラ
+            button.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                selectOption(option.value);
+            });
+            optionsContainer.appendChild(button);
+        });
+    }, 100);
     
     updateBackButton();
 }

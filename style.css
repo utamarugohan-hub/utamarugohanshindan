@@ -161,6 +161,8 @@ main {
     transition: all 0.3s ease;
     text-align: left;
     width: 100%;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .option-btn:hover {
@@ -168,6 +170,30 @@ main {
     border-color: #a0916d;
     color: #fefdfb;
     transform: translateX(5px);
+}
+
+.option-btn:active {
+    background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+    border-color: #a0916d;
+    color: #fefdfb;
+    transform: translateX(5px);
+}
+
+/* スマホのタッチ時のスタイル */
+@media (hover: none) {
+    .option-btn:hover {
+        background: #fefdfb;
+        color: #8b7355;
+        border-color: #d4c4b0;
+        transform: none;
+    }
+    
+    .option-btn:active {
+        background: linear-gradient(135deg, #c4a484 0%, #a0916d 100%);
+        border-color: #a0916d;
+        color: #fefdfb;
+        transform: scale(0.98);
+    }
 }
 
 /* 結果画面 */
