@@ -2,7 +2,7 @@
 const results = {
     'freezing-baby': {
         type: 'フリージング離乳食タイプ',
-        image: 'images/kantanfreezing.png',
+        image: 'images/kantanfreezing.jpg',
         feature: '週末にまとめて作って冷凍保存、平日は温めるだけで離乳食が完成！忙しいママ・パパにぴったりのタイプです。',
         reason: '買い物リストから下準備・調理までまるっとマネするだけで、1週間分のフリージング離乳食が完成！毎食の献立も載っているので、その通りにあげればOK。あげるときはチンするだけで簡単です。',
         bookFeatures: [
@@ -66,7 +66,7 @@ const results = {
     },
     'toriwake': {
         type: 'とりわけレシピタイプ',
-        image: 'images/oyakogohan.png',
+        image: 'images/oyakogohan.jpg',
         feature: '大人と子どもの食事を同じメニューから取り分けて、同時に作りたいタイプです。',
         reason: '大人と同じメニューを取り分けられる幼児食レシピが200レシピ以上掲載！単品レシピ集なので、毎日好きなメニューを選べます。',
         bookFeatures: [
@@ -88,7 +88,7 @@ const results = {
     },
     'kondate': {
         type: '献立丸ごとタイプ',
-        image: 'images/oyakokondate.png',
+        image: 'images/oyakokondate.jpg',
         feature: '毎日の献立を考えるのが苦手。買い物リストから調理まで、全部まるっとマネしたいタイプです。',
         reason: '平日5日間の献立を丸ごとマネできる！買い物リスト・下準備・調理・献立の流れをそのまま再現できます。大人と子どもが一緒に食べられるメニューで、時短・簡単に作れます。',
         bookFeatures: [
