@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>うたまるごはん診断</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>うたまるごはん診断</h1>
+        </header>
+
+        <!-- プログレスバー -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text"><span id="currentQuestion">1</span> / 8</p>
+        </div>
+
+        <main class="quiz-screen">
+            <div class="question-box">
+                <h2 class="question-title" id="questionTitle">質問のタイトル</h2>
+                <div class="options" id="optionsContainer">
+                    <!-- 選択肢がここに表示されます -->
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2026 うたまるごはん</p>
+        </footer>
+    </div>
+
+    <script src="quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+/* リセットCSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 全体のスタイル */
+body {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    background: linear-gradient(135deg, #FFF5EB 0%, #FFE5CC 50%, #F5EBE0 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #5A4A3A;
+}
+
+.container {
+    max-width: 600px;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 183, 128, 0.3);
+    overflow: hidden;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+header {
+    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    padding: 30px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #5A4A3A;
+    margin-bottom: 8px;
+}
+
+header .subtitle {
+    font-size: 14px;
+    color: #7A6A5A;
+    font-weight: 400;
+}
+
+/* メインコンテンツ */
+main {
+    flex: 1;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* スタート画面 */
+.intro-box {
+    background: linear-gradient(135deg, #FFF5EB 0%, #FFE5CC 100%);
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    border: 3px solid #FFD7B5;
+    text-align: center;
+}
+
+.intro-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #5A4A3A;
+    margin-bottom: 15px;
+}
+
+.intro-text:last-child {
+    margin-bottom: 0;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    color: #5A4A3A;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 18px 60px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 183, 128, 0.4);
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 183, 128, 0.6);
+}
+
+/* プログレスバー */
+.progress-container {
+    padding: 20px 30px;
+    background: #FFF5EB;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #F5EBE0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FFD7B5 0%, #FFB380 100%);
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7A6A5A;
+}
+
+/* 質問画面 */
+.question-box {
+    width: 100%;
+}
+
+.question-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #5A4A3A;
+    margin-bottom: 30px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option-btn {
+    background: linear-gradient(135deg, #FFF5EB 0%, #FFE5CC 100%);
+    color: #5A4A3A;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 20px 25px;
+    border: 3px solid #FFD7B5;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.option-btn:hover {
+    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    border-color: #FFB380;
+    transform: translateX(5px);
+}
+
+/* 結果画面 */
+.result-box {
+    width: 100%;
+}
+
+.result-type {
+    font-size: 24px;
+    font-weight: 700;
+    color: #5A4A3A;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    border-radius: 15px;
+}
+
+.result-image {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.result-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(255, 183, 128, 0.3);
+}
+
+.result-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #5A4A3A;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #FFD7B5;
+}
+
+.result-content p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #5A4A3A;
+    margin-bottom: 20px;
+}
+
+.result-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.result-content ul li {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #5A4A3A;
+    padding-left: 25px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.result-content ul li::before {
+    content: "✔️";
+    position: absolute;
+    left: 0;
+}
+
+.book-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFB380;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 購入リンク */
+.purchase-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.purchase-link {
+    display: block;
+    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    color: #5A4A3A;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 183, 128, 0.4);
+}
+
+.purchase-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 183, 128, 0.6);
+}
+
+.retry-btn {
+    background: linear-gradient(135deg, #F5EBE0 0%, #E5D5C0 100%);
+    color: #5A4A3A;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px 40px;
+    border: 3px solid #FFD7B5;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 30px auto 0;
+    display: block;
+}
+
+.retry-btn:hover {
+    background: linear-gradient(135deg, #FFD7B5 0%, #FFB380 100%);
+    transform: translateY(-3px);
+}
+
+/* フッター */
+footer {
+    background: #F5EBE0;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #7A6A5A;
+}
+
+footer p {
+    margin-bottom: 5px;
+}
+
+footer a {
+    color: #FFB380;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 24px;
+    }
+
+    .intro-text {
+        font-size: 14px;
+    }
+
+    .start-btn {
+        font-size: 18px;
+        padding: 15px 40px;
+    }
+
+    .question-title {
+        font-size: 18px;
+    }
+
+    .option-btn {
+        font-size: 14px;
+        padding: 15px 20px;
+    }
+
+    .result-type {
+        font-size: 20px;
+    }
+
+    .result-content h3 {
+        font-size: 16px;
+    }
+
+    .result-content p,
+    .result-content ul li {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>診断結果 - うたまるごはん診断</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>うたまるごはん診断</h1>
+            <p class="subtitle">診断結果</p>
+        </header>
+
+        <main class="result-screen">
+            <div class="result-box">
+                <h2 class="result-type" id="resultType">診断タイプ</h2>
+                
+                <div class="result-image">
+                    <img id="bookImage" src="" alt="おすすめの本">
+                </div>
+
+                <div class="result-content">
+                    <h3>あなたの特徴</h3>
+                    <p id="resultFeature"></p>
+
+                    <h3>この本がおすすめな理由</h3>
+                    <p id="resultReason"></p>
+
+                    <h3>本の特徴</h3>
+                    <ul id="resultBookFeatures"></ul>
+
+                    <h3>こんな人におすすめ</h3>
+                    <ul id="resultRecommended"></ul>
+
+                    <h3>おすすめの本</h3>
+                    <p class="book-title" id="bookTitle"></p>
+
+                    <div class="purchase-links" id="purchaseLinks">
+                        <!-- 購入リンクがここに表示されます -->
+                    </div>
+                </div>
+
+                <button class="retry-btn" onclick="retryQuiz()">もう一度診断する</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2026 うたまるごはん</p>
+            <p><a href="https://coo-petit.stores.jp/" target="_blank">オンラインショップ</a></p>
+        </footer>
+    </div>
+
+    <script src="result.js"></script>
+</body>
+</html>
