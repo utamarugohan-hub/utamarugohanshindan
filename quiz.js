@@ -88,6 +88,7 @@ let currentQuestionIndex = 0;
 window.addEventListener('DOMContentLoaded', () => {
     showQuestion(currentQuestionIndex);
     updateProgress();
+    updateBackButton();
 });
 
 // 質問を表示する関数
@@ -105,6 +106,8 @@ function showQuestion(index) {
         button.addEventListener('click', () => selectOption(option.value));
         optionsContainer.appendChild(button);
     });
+    
+    updateBackButton();
 }
 
 // 選択肢を選んだときの処理
@@ -121,6 +124,25 @@ function selectOption(value) {
     } else {
         // 全ての質問が終わったら結果画面へ
         saveAnswersAndRedirect();
+    }
+}
+
+// 前の質問に戻る
+function goBack() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        showQuestion(currentQuestionIndex);
+        updateProgress();
+    }
+}
+
+// 戻るボタンの表示/非表示を更新
+function updateBackButton() {
+    const backBtn = document.getElementById('backBtn');
+    if (currentQuestionIndex > 0) {
+        backBtn.style.display = 'block';
+    } else {
+        backBtn.style.display = 'none';
     }
 }
 

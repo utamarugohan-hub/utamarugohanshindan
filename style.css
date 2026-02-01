@@ -292,6 +292,28 @@ main {
     transform: translateY(-3px);
 }
 
+/* 戻るボタン */
+.back-btn {
+    background: #fefdfb;
+    color: #8b7355;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 30px;
+    border: 2px solid #d4c4b0;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+}
+
+.back-btn:hover {
+    background: #ede7e0;
+    border-color: #a0916d;
+    transform: translateY(-2px);
+}
+
 /* フッター */
 footer {
     background: #fefdfb;
