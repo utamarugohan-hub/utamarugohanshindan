@@ -367,3 +367,14 @@ async function trackClick(clickTarget) {
         console.error('記録エラー:', error);
     }
 }
+
+// フッターのオンラインショップリンクにイベントリスナーを追加
+window.addEventListener('DOMContentLoaded', () => {
+    const footerShopLink = document.getElementById('footerShopLink');
+    if (footerShopLink) {
+        footerShopLink.addEventListener('click', () => {
+            hasClickedLink = true;
+            trackClick('フッター：オンラインショップ');
+        });
+    }
+});
