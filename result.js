@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// 診断結果を判定する関数
+// 診断結果を判定する関数（調整版）
 function determineResult(answers) {
     const age = answers[0]; // Q1: 年齢
     const stage = answers[1]; // Q2: 段階
@@ -164,25 +164,35 @@ function determineResult(answers) {
         return 'kondate';
     }
 
-    // 1歳半〜3歳の場合、詳細判定
+    // 1歳半〜3歳の場合、詳細判定（調整版）
     if (age === '1.5-3' || stage === 'toddler') {
-        // とりわけしたい → とりわけレシピタイプ
+        // 【優先度1】とりわけしたい → とりわけレシピタイプ
         if (mealStyle === 'together' || worry === 'separate-hard') {
             return 'toriwake';
         }
 
-        // フリージング好き → 幼児食フリージングタイプ
+        // 【優先度2】たくさんのレシピから選びたい → とりわけレシピタイプ（調整：優先度を上げた）
+        if (bookNeed === 'many-recipes') {
+            return 'toriwake';
+        }
+
+        // 【優先度3】幼児食フリージングタイプ（調整：条件を追加）
+        // パターンA: フリージング好き AND 子どもだけ別
         if (freezing === 'love' && mealStyle === 'separate') {
             return 'freezing-toddler';
         }
+        // パターンB: 週末作り置き AND フリージング好き（新規追加）
+        if (cookTime === 'weekend' && freezing === 'love') {
+            return 'freezing-toddler';
+        }
 
-        // 献立重視 → 献立丸ごとタイプ
+        // 【優先度4】献立重視 → 献立丸ごとタイプ
         if (menuStyle === 'copy' || menuStyle === 'not-good' || bookNeed === 'weekly-menu') {
             return 'kondate';
         }
 
-        // たくさんのレシピから選びたい → とりわけレシピタイプ
-        if (bookNeed === 'many-recipes' || menuStyle === 'arrange') {
+        // 【優先度5】アレンジしたい → とりわけレシピタイプ
+        if (menuStyle === 'arrange') {
             return 'toriwake';
         }
 
