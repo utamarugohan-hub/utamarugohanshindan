@@ -4,12 +4,12 @@ const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7QNBsN
 // 診断結果データ
 const results = {
     'freezing-baby': {
-        type: 'フリージング離乳食タイプ',
+        type: 'フリージング離乳食・幼児食タイプ',
         image: 'images/kantanfreezing.jpg',
         feature: '週末にまとめて作って冷凍保存、平日は温めるだけで離乳食が完成！忙しいママ・パパにぴったりのタイプです。',
-        reason: '買い物リストから下準備・調理までまるっとマネするだけで、1週間分のフリージング離乳食が完成！毎食の献立も載っているので、その通りにあげればOK。あげるときはチンするだけで簡単です。',
+        reason: '買い物リストから下準備・調理までまるっとマネするだけで、1週間分のフリージング離乳食・幼児食が完成！毎食の献立も載っているので、その通りにあげればOK。あげるときはチンするだけで簡単です。',
         bookFeatures: [
-            '1週間分のフリージング離乳食レシピ',
+            '1週間分のフリージング離乳食・幼児食レシピ',
             '買い物リスト・下準備・調理の流れを掲載',
             '毎食の献立付き',
             '対象年齢：0歳〜6歳（特に11ヶ月までがメイン）'
@@ -68,7 +68,7 @@ const results = {
         ]
     },
     'toriwake': {
-        type: 'とりわけレシピタイプ',
+        type: 'とりわけ親子ごはんタイプ',
         image: 'images/oyakogohan.jpg',
         feature: '大人と子どもの食事を同じメニューから取り分けて、同時に作りたいタイプです。',
         reason: '大人と同じメニューを取り分けられる幼児食レシピが200レシピ以上掲載！単品レシピ集なので、毎日好きなメニューを選べます。',
@@ -90,7 +90,7 @@ const results = {
         ]
     },
     'kondate': {
-        type: '献立丸ごとタイプ',
+        type: 'まるごと親子献立タイプ',
         image: 'images/oyakokondate.jpg',
         feature: '毎日の献立を考えるのが苦手。買い物リストから調理まで、全部まるっとマネしたいタイプです。',
         reason: '平日5日間の献立を丸ごとマネできる！買い物リスト・下準備・調理・献立の流れをそのまま再現できます。大人と子どもが一緒に食べられるメニューで、時短・簡単に作れます。',
@@ -149,7 +149,7 @@ function determineResult(answers) {
     const menuStyle = answers[6]; // Q7: 献立スタイル
     const bookNeed = answers[7]; // Q8: レシピ本に求めるもの
 
-    // 0歳（離乳食初期〜後期）→ フリージング離乳食タイプ
+    // 0歳（離乳食初期〜後期）→ フリージング離乳食・幼児食タイプ
     if (age === '0-early' || age === '0-late' || stage === 'early' || stage === 'late') {
         return 'freezing-baby';
     }
@@ -159,19 +159,19 @@ function determineResult(answers) {
         return 'freezing-complete';
     }
 
-    // 3歳〜6歳 → 献立丸ごとタイプ
+    // 3歳〜6歳 → まるごと親子献立タイプ
     if (age === '3-6' || stage === 'adult') {
         return 'kondate';
     }
 
     // 1歳半〜3歳の場合、詳細判定（調整版）
     if (age === '1.5-3' || stage === 'toddler') {
-        // 【優先度1】とりわけしたい → とりわけレシピタイプ
+        // 【優先度1】とりわけしたい → とりわけ親子ごはんタイプ
         if (mealStyle === 'together' || worry === 'separate-hard') {
             return 'toriwake';
         }
 
-        // 【優先度2】たくさんのレシピから選びたい → とりわけレシピタイプ（調整：優先度を上げた）
+        // 【優先度2】たくさんのレシピから選びたい → とりわけ親子ごはんタイプ（調整：優先度を上げた）
         if (bookNeed === 'many-recipes') {
             return 'toriwake';
         }
@@ -186,17 +186,17 @@ function determineResult(answers) {
             return 'freezing-toddler';
         }
 
-        // 【優先度4】献立重視 → 献立丸ごとタイプ
+        // 【優先度4】献立重視 → まるごと親子献立タイプ
         if (menuStyle === 'copy' || menuStyle === 'not-good' || bookNeed === 'weekly-menu') {
             return 'kondate';
         }
 
-        // 【優先度5】アレンジしたい → とりわけレシピタイプ
+        // 【優先度5】アレンジしたい → とりわけ親子ごはんタイプ
         if (menuStyle === 'arrange') {
             return 'toriwake';
         }
 
-        // デフォルト → 献立丸ごとタイプ
+        // デフォルト → まるごと親子献立タイプ
         return 'kondate';
     }
 
