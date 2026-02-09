@@ -10,6 +10,12 @@
 <body>
     <div class="container">
         <header>
+            <!-- TOP画像（レスポンシブ対応） -->
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/top-mobile.jpg">
+                <source media="(min-width: 769px)" srcset="images/top-pc.jpg">
+                <img src="images/top-pc.jpg" alt="うたまるごはん診断" class="top-image">
+            </picture>
             <h1>うたまるごはん診断</h1>
             <p class="subtitle">診断結果</p>
         </header>
