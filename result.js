@@ -120,83 +120,58 @@ let currentBookTitle = '';
 let hasClickedLink = false;
 
 // ページ読み込み時に診断結果を表示
-window.addEventListener('DOMContentLoaded', () => {
-    const answers = JSON.parse(localStorage.getItem('quizAnswers'));
+document.addEventListener('DOMContentLoaded', () => {
+    // localStorageから回答を取得
+    const answersJson = localStorage.getItem('quizAnswers');
+    if (!answersJson) {
+        alert('診断データが見つかりません。最初からやり直してください。');
+        window.location.href = 'index.html';
+        return;
+    }
+
+    const answers = JSON.parse(answersJson);
+    
+    // 診断結果を決定
     const resultType = determineResult(answers);
-    currentResultType = resultType;
+    
+    // 診断結果を表示
     displayResult(resultType);
     
-    // 診断完了を記録（クリック無し）
+    // クリック計測（診断完了時）
     trackDiagnosis(resultType);
-    
-    // ページを離れる前にクリックしていない場合の処理
-    window.addEventListener('beforeunload', () => {
-        if (!hasClickedLink) {
-            // クリック無しを記録（同期処理）
-            navigator.sendBeacon(GOOGLE_APPS_SCRIPT_URL, createTrackingData('クリック無し'));
-        }
-    });
 });
 
-// 診断結果を判定する関数（調整版）
+// 診断結果を決定（シンプル版）
 function determineResult(answers) {
-    const age = answers[0]; // Q1: 年齢
-    const stage = answers[1]; // Q2: 段階
-    const worry = answers[2]; // Q3: 悩み
-    const cookTime = answers[3]; // Q4: 料理する時間
-    const freezing = answers[4]; // Q5: フリージング
-    const mealStyle = answers[5]; // Q6: 食事スタイル
-    const menuStyle = answers[6]; // Q7: 献立スタイル
-    const bookNeed = answers[7]; // Q8: レシピ本に求めるもの
+    const age = answers.q1;
+    const style = answers.q2;
 
-    // 0歳（離乳食初期〜後期）→ フリージング離乳食・幼児食タイプ
-    if (age === '0-early' || age === '0-late' || stage === 'early' || stage === 'late') {
+    // 【0歳】フリージング離乳食・幼児食タイプ
+    if (age === '0') {
         return 'freezing-baby';
     }
 
-    // 1歳〜1歳半（離乳食完了期）→ 完了期フリージングタイプ
-    if (age === '1-1.5' || stage === 'complete') {
+    // 【1歳〜1歳半】完了期フリージングタイプ
+    if (age === '1-1.5') {
         return 'freezing-complete';
     }
 
-    // 3歳〜6歳 → まるごと親子献立タイプ
-    if (age === '3-6' || stage === 'adult') {
-        return 'kondate';
-    }
-
-    // 1歳半〜3歳の場合、詳細判定（調整版）
-    if (age === '1.5-3' || stage === 'toddler') {
-        // 【優先度1】とりわけしたい → とりわけ親子ごはんタイプ
-        if (mealStyle === 'together' || worry === 'separate-hard') {
+    // 【1歳半〜3歳】スタイルで判定
+    if (age === '1.5-3') {
+        if (style === 'together') {
+            // 大人と子どものご飯を同時に調理したい
             return 'toriwake';
-        }
-
-        // 【優先度2】たくさんのレシピから選びたい → とりわけ親子ごはんタイプ（調整：優先度を上げた）
-        if (bookNeed === 'many-recipes') {
-            return 'toriwake';
-        }
-
-        // 【優先度3】幼児食フリージングタイプ（調整：条件を追加）
-        // パターンA: フリージング好き AND 子どもだけ別
-        if (freezing === 'love' && mealStyle === 'separate') {
+        } else if (style === 'freezing') {
+            // 週末にまとめてつくって冷凍したい
             return 'freezing-toddler';
-        }
-        // パターンB: 週末作り置き AND フリージング好き（新規追加）
-        if (cookTime === 'weekend' && freezing === 'love') {
-            return 'freezing-toddler';
-        }
-
-        // 【優先度4】献立重視 → まるごと親子献立タイプ
-        if (menuStyle === 'copy' || menuStyle === 'not-good' || bookNeed === 'weekly-menu') {
+        } else if (style === 'menu') {
+            // 毎日の献立を見たい
             return 'kondate';
         }
+    }
 
-        // 【優先度5】アレンジしたい → とりわけ親子ごはんタイプ
-        if (menuStyle === 'arrange') {
-            return 'toriwake';
-        }
-
-        // デフォルト → まるごと親子献立タイプ
+    // 【3歳〜6歳】まるごと親子献立タイプ
+    if (age === '3-6') {
         return 'kondate';
     }
 
@@ -204,177 +179,129 @@ function determineResult(answers) {
     return 'kondate';
 }
 
-// 診断結果を表示する関数
+// 診断結果を表示
 function displayResult(resultType) {
     const result = results[resultType];
+    
+    // グローバル変数に保存
+    currentResultType = result.type;
     currentBookTitle = result.bookTitle;
-
+    
+    // 各要素に値を設定
     document.getElementById('resultType').textContent = result.type;
     document.getElementById('bookImage').src = result.image;
-    document.getElementById('bookImage').alt = result.bookTitle;
     document.getElementById('resultFeature').textContent = result.feature;
     document.getElementById('resultReason').textContent = result.reason;
-
-    // 本の特徴
-    const bookFeaturesContainer = document.getElementById('resultBookFeatures');
-    bookFeaturesContainer.innerHTML = '';
+    document.getElementById('bookTitle').textContent = result.bookTitle;
+    
+    // 本の特徴をリスト表示
+    const bookFeaturesUl = document.getElementById('resultBookFeatures');
+    bookFeaturesUl.innerHTML = '';
     result.bookFeatures.forEach(feature => {
         const li = document.createElement('li');
         li.textContent = feature;
-        bookFeaturesContainer.appendChild(li);
+        bookFeaturesUl.appendChild(li);
     });
-
-    // こんな人におすすめ
-    const recommendedContainer = document.getElementById('resultRecommended');
-    recommendedContainer.innerHTML = '';
+    
+    // おすすめポイントをリスト表示
+    const recommendedUl = document.getElementById('resultRecommended');
+    recommendedUl.innerHTML = '';
     result.recommended.forEach(rec => {
         const li = document.createElement('li');
         li.textContent = rec;
-        recommendedContainer.appendChild(li);
+        recommendedUl.appendChild(li);
     });
-
-    document.getElementById('bookTitle').textContent = result.bookTitle;
-
-    // 購入リンク
-    const linksContainer = document.getElementById('purchaseLinks');
-    linksContainer.innerHTML = '';
+    
+    // 購入リンクを表示
+    const purchaseLinksDiv = document.getElementById('purchaseLinks');
+    purchaseLinksDiv.innerHTML = '';
     result.links.forEach(link => {
         const a = document.createElement('a');
         a.href = link.url;
-        a.className = 'purchase-link';
         a.textContent = link.text;
+        a.className = 'purchase-link';
         a.target = '_blank';
-        a.addEventListener('click', (e) => {
+        a.rel = 'noopener noreferrer';
+        
+        // クリック時にトラッキング
+        a.addEventListener('click', () => {
             hasClickedLink = true;
             trackClick(link.target);
         });
-        linksContainer.appendChild(a);
+        
+        purchaseLinksDiv.appendChild(a);
+    });
+    
+    // フッターのオンラインショップリンクもトラッキング
+    const footerShopLink = document.getElementById('footerShopLink');
+    if (footerShopLink) {
+        footerShopLink.addEventListener('click', () => {
+            hasClickedLink = true;
+            trackClick('フッターオンラインショップ');
+        });
+    }
+}
+
+// 診断完了時のトラッキング
+function trackDiagnosis(resultType) {
+    // まず「クリック無し」で記録
+    const data = createTrackingData('クリック無し');
+    
+    // Google Apps Script に送信
+    fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }).catch(error => {
+        console.error('診断記録エラー:', error);
     });
 }
 
-// もう一度診断するボタン
-function retryQuiz() {
-    localStorage.removeItem('quizAnswers');
-    window.location.href = 'index.html';
-}
-
-// デバイスを判定する関数
-function getDevice() {
-    const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-        return 'タブレット';
-    }
-    if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-        return 'スマホ';
-    }
-    return 'PC';
-}
-
-// 地域とIPアドレスを取得する関数（非同期）
-async function getLocationData() {
-    try {
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        return {
-            region: data.region || '不明',
-            ipAddress: data.ip || '不明'
-        };
-    } catch (error) {
-        return {
-            region: '不明',
-            ipAddress: '不明'
-        };
-    }
-}
-
-// トラッキングデータを作成する関数
-function createTrackingData(clickTarget) {
-    const now = new Date();
-    const timestamp = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
-    const device = getDevice();
+// 購入リンククリック時のトラッキング
+function trackClick(target) {
+    const data = createTrackingData(target);
     
-    return JSON.stringify({
-        timestamp: timestamp,
-        resultType: results[currentResultType].type,
+    // navigator.sendBeacon で送信（ページ離脱時も確実に送信）
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    navigator.sendBeacon(GOOGLE_APPS_SCRIPT_URL, blob);
+}
+
+// トラッキングデータを作成
+function createTrackingData(clickTarget) {
+    // デバイス判定
+    const userAgent = navigator.userAgent.toLowerCase();
+    let device = 'PC';
+    if (userAgent.indexOf('iphone') !== -1 || userAgent.indexOf('android') !== -1) {
+        device = 'スマホ';
+    } else if (userAgent.indexOf('ipad') !== -1 || userAgent.indexOf('tablet') !== -1) {
+        device = 'タブレット';
+    }
+    
+    return {
+        timestamp: new Date().toLocaleString('ja-JP'),
+        resultType: currentResultType,
         bookTitle: currentBookTitle,
         clickTarget: clickTarget,
         device: device,
         region: '取得中',
         ipAddress: '取得中'
-    });
-}
-
-// 診断完了時の記録（クリック無し）
-async function trackDiagnosis(resultType) {
-    const locationData = await getLocationData();
-    const now = new Date();
-    const timestamp = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
-    const device = getDevice();
-    
-    const data = {
-        timestamp: timestamp,
-        resultType: results[resultType].type,
-        bookTitle: results[resultType].bookTitle,
-        clickTarget: 'クリック無し',
-        device: device,
-        region: locationData.region,
-        ipAddress: locationData.ipAddress
     };
-    
-    try {
-        await fetch(GOOGLE_APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        console.log('診断完了を記録しました:', data);
-    } catch (error) {
-        console.error('記録エラー:', error);
-    }
 }
 
-// 購入リンククリック時の記録
-async function trackClick(clickTarget) {
-    const locationData = await getLocationData();
-    const now = new Date();
-    const timestamp = now.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
-    const device = getDevice();
-    
-    const data = {
-        timestamp: timestamp,
-        resultType: results[currentResultType].type,
-        bookTitle: currentBookTitle,
-        clickTarget: clickTarget,
-        device: device,
-        region: locationData.region,
-        ipAddress: locationData.ipAddress
-    };
-    
-    try {
-        await fetch(GOOGLE_APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        console.log('クリックを記録しました:', data);
-    } catch (error) {
-        console.error('記録エラー:', error);
-    }
-}
-
-// フッターのオンラインショップリンクにイベントリスナーを追加
-window.addEventListener('DOMContentLoaded', () => {
-    const footerShopLink = document.getElementById('footerShopLink');
-    if (footerShopLink) {
-        footerShopLink.addEventListener('click', () => {
-            hasClickedLink = true;
-            trackClick('フッター：オンラインショップ');
-        });
+// ページ離脱時にクリックしていない場合も記録
+window.addEventListener('beforeunload', () => {
+    if (!hasClickedLink) {
+        const data = createTrackingData('クリック無し');
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        navigator.sendBeacon(GOOGLE_APPS_SCRIPT_URL, blob);
     }
 });
+
+// もう一度診断する
+function retryQuiz() {
+    localStorage.removeItem('quizAnswers');
+    window.location.href = 'index.html';
+}
