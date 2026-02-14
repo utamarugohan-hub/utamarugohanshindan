@@ -217,6 +217,12 @@ function displayResult(resultType) {
     document.getElementById('resultReason').textContent = result.reason;
     document.getElementById('bookTitle').textContent = result.bookTitle;
     
+    // 「この本がおすすめな理由」または「おすすめな理由」の見出しを変更
+    const reasonTitle = document.querySelector('.result-content h3:nth-of-type(2)');
+    if (reasonTitle) {
+        reasonTitle.textContent = result.isBook ? 'この本がおすすめな理由' : 'おすすめな理由';
+    }
+    
     // 「本の特徴」または「特徴」の見出しを変更
     const bookFeaturesTitle = document.querySelector('.result-content h3:nth-of-type(3)');
     if (bookFeaturesTitle) {
@@ -293,10 +299,26 @@ function displayResult(resultType) {
         shoppingListText.innerHTML = '＼書籍とセットで持っていると、もっと便利！／<br><strong>チェックできるデジタルお買い物リストも販売中</strong>';
         shoppingListText.style.fontSize = '14px';
         shoppingListText.style.color = '#7e3b28';
-        shoppingListText.style.margin = '0';
+        shoppingListText.style.margin = '0 0 15px 0';
         shoppingListText.style.lineHeight = '1.6';
         
+        const shoppingListButton = document.createElement('a');
+        shoppingListButton.href = 'https://utamarugohan.base.shop/items/134191926';
+        shoppingListButton.textContent = 'お買い物リストの購入はこちら';
+        shoppingListButton.className = 'purchase-link';
+        shoppingListButton.target = '_blank';
+        shoppingListButton.rel = 'noopener noreferrer';
+        shoppingListButton.style.marginTop = '10px';
+        shoppingListButton.style.display = 'inline-block';
+        
+        // クリック時にトラッキング
+        shoppingListButton.addEventListener('click', () => {
+            hasClickedLink = true;
+            trackClick('お買い物リスト');
+        });
+        
         shoppingListDiv.appendChild(shoppingListText);
+        shoppingListDiv.appendChild(shoppingListButton);
         purchaseLinksDiv.appendChild(shoppingListDiv);
     }
     
