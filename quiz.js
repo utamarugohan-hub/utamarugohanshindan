@@ -14,9 +14,9 @@ const questions = [
         id: 2,
         question: '理想の食事作りは？',
         options: [
-            { text: '大人と子どものご飯を同時に調理したい', value: 'together' },
-            { text: '週末にまとめてつくって冷凍したい', value: 'freezing' },
-            { text: '毎日の献立を見たい', value: 'menu' }
+            { text: '大人と子どものご飯を同時に作りたい', value: 'together' },
+            { text: '子どもの分だけ週末にまとめてつくって冷凍したい', value: 'freezing' },
+            { text: '毎日の献立を考えなくてよくなりたい', value: 'menu' }
         ]
     }
 ];
