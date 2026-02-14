@@ -217,24 +217,37 @@ function displayResult(resultType) {
     });
     
     // 購入リンクを表示
-    const purchaseLinksDiv = document.getElementById('purchaseLinks');
-    purchaseLinksDiv.innerHTML = '';
-    result.links.forEach(link => {
-        const a = document.createElement('a');
-        a.href = link.url;
-        a.textContent = link.text;
-        a.className = 'purchase-link';
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        
-        // クリック時にトラッキング
-        a.addEventListener('click', () => {
-            hasClickedLink = true;
-            trackClick(link.target);
-        });
-        
-        purchaseLinksDiv.appendChild(a);
+const purchaseLinksDiv = document.getElementById('purchaseLinks');
+purchaseLinksDiv.innerHTML = '';
+
+// 楽天・Amazon で販売している本の場合、書店情報を追加
+if (result.links.some(link => link.target === '楽天市場' || link.target === 'Amazon')) {
+    const bookstoreNote = document.createElement('p');
+    bookstoreNote.textContent = '全国の書店さんでも販売中！';
+    bookstoreNote.style.textAlign = 'center';
+    bookstoreNote.style.fontSize = '14px';
+    bookstoreNote.style.color = '#7e3b28';
+    bookstoreNote.style.marginBottom = '15px';
+    bookstoreNote.style.fontWeight = '500';
+    purchaseLinksDiv.appendChild(bookstoreNote);
+}
+
+result.links.forEach(link => {
+    const a = document.createElement('a');
+    a.href = link.url;
+    a.textContent = link.text;
+    a.className = 'purchase-link';
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    
+    // クリック時にトラッキング
+    a.addEventListener('click', () => {
+        hasClickedLink = true;
+        trackClick(link.target);
     });
+    
+    purchaseLinksDiv.appendChild(a);
+});
     
     // フッターのオンラインショップリンクもトラッキング
     const footerShopLink = document.getElementById('footerShopLink');
