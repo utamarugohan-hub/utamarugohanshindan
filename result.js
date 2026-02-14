@@ -7,8 +7,7 @@ const results = {
         type: 'フリージング離乳食・幼児食タイプ',
         image: 'images/kantanfreezing.jpg',
         feature: '1週間分まとめて作って冷凍保存、たべる時は温めるだけで離乳食が完成！買い物・調理・献立をそのままマネして離乳食をできる限り悩まず進めたいタイプです。',
-        reason: '買い物リストから下準備・調理までまるっとマネするだけで、1週間分のフリージング離乳食（後期まで）完了期と幼児食は単品レシピが完成！毎食の献立も載っているので、その通りにあげればOK。あげるときはチンするだけで簡単です。
-',
+        reason: '買い物リストから下準備・調理までまるっとマネするだけで、1週間分のフリージング離乳食（後期まで）完了期と幼児食は単品レシピが完成！毎食の献立も載っているので、その通りにあげればOK。あげるときはチンするだけで簡単です。',
         bookFeatures: [
             '1週間分のフリージング離乳食',
             '離乳食完了期・幼児食の単品レシピ集',
@@ -24,6 +23,7 @@ const results = {
             '自分で1から考えるのが不安・苦手なかた'
         ],
         bookTitle: 'うたまるごはんのかんたんフリージング離乳食・幼児食',
+        isBook: true,
         links: [
             { text: '楽天市場はこちら', url: 'https://a.r10.to/hPOKvX', target: '楽天市場' },
             { text: 'Amazonはこちら', url: 'https://www.amazon.co.jp/dp/4058017767', target: 'Amazon' }
@@ -47,6 +47,8 @@ const results = {
             '平日は温めるだけで楽したい'
         ],
         bookTitle: 'うたまるごはんの完了期1週間フリージング',
+        isBook: false,
+        additionalInfo: 'こちらは書籍ではなく、うたまるごはんのオリジナルコンテンツです。\n現在はBASEのみの販売となります。\n12w分ご用意\n（ダウンロード版と冊子版2種類あります）\nダウンロード版は1wずつ単品で購入していただけます。\n月に1回6wずつまとめた、冊子パート1とパート2は48時間限定で発売をしています。\nお得な2冊セットが1番人気です。\n（発売日はサイトまたはInstagramでお知らせしています。）',
         links: [
             { text: '購入サイトはこちら', url: 'https://utamarugohan.base.shop', target: '購入サイト' }
         ]
@@ -71,6 +73,8 @@ const results = {
             'お弁当にもおすすめ'
         ],
         bookTitle: 'うたまるごはんの幼児食2週間フリージング',
+        isBook: false,
+        additionalInfo: 'こちらは書籍ではなく、うたまるごはんのオリジナルコンテンツです。\n現在はBASEのみの販売となります。',
         links: [
             { text: '購入サイトはこちら', url: 'https://utamarugohan.base.shop/categories/6926213', target: '購入サイト' }
         ]
@@ -96,6 +100,7 @@ const results = {
             '子どもはうす味で、大人はしっかり味で満足できるごはんを作りたい'
         ],
         bookTitle: 'うたまるごはんのかんたん親子ごはん',
+        isBook: true,
         links: [
             { text: '楽天市場はこちら', url: 'https://a.r10.to/hg0cQl', target: '楽天市場' },
             { text: 'Amazonはこちら', url: 'https://www.amazon.co.jp/dp/4058020245', target: 'Amazon' }
@@ -123,6 +128,8 @@ const results = {
             '子どもに栄養たっぷりのごはんをあげたい'
         ],
         bookTitle: 'うたまるごはんの平日らくちん親子献立',
+        isBook: true,
+        shoppingListNote: true,
         links: [
             { text: '楽天市場はこちら', url: 'https://a.r10.to/hgwpK5', target: '楽天市場' },
             { text: 'Amazonはこちら', url: 'https://amzn.asia/d/89ZKtH2', target: 'Amazon' }
@@ -210,6 +217,12 @@ function displayResult(resultType) {
     document.getElementById('resultReason').textContent = result.reason;
     document.getElementById('bookTitle').textContent = result.bookTitle;
     
+    // 「本の特徴」または「特徴」の見出しを変更
+    const bookFeaturesTitle = document.querySelector('.result-content h3:nth-of-type(3)');
+    if (bookFeaturesTitle) {
+        bookFeaturesTitle.textContent = result.isBook ? '本の特徴' : '特徴';
+    }
+    
     // 本の特徴をリスト表示
     const bookFeaturesUl = document.getElementById('resultBookFeatures');
     bookFeaturesUl.innerHTML = '';
@@ -228,38 +241,85 @@ function displayResult(resultType) {
         recommendedUl.appendChild(li);
     });
     
-    // 購入リンクを表示
-const purchaseLinksDiv = document.getElementById('purchaseLinks');
-purchaseLinksDiv.innerHTML = '';
-
-// 楽天・Amazon で販売している本の場合、書店情報を追加
-if (result.links.some(link => link.target === '楽天市場' || link.target === 'Amazon')) {
-    const bookstoreNote = document.createElement('p');
-    bookstoreNote.textContent = '全国の書店さんでも販売中！';
-    bookstoreNote.style.textAlign = 'center';
-    bookstoreNote.style.fontSize = '14px';
-    bookstoreNote.style.color = '#7e3b28';
-    bookstoreNote.style.marginBottom = '15px';
-    bookstoreNote.style.fontWeight = '500';
-    purchaseLinksDiv.appendChild(bookstoreNote);
-}
-
-result.links.forEach(link => {
-    const a = document.createElement('a');
-    a.href = link.url;
-    a.textContent = link.text;
-    a.className = 'purchase-link';
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
+    // 「おすすめの本」または「おすすめのコンテンツ」の見出しを変更
+    const bookTitleHeading = document.querySelector('.result-content h3:nth-of-type(5)');
+    if (bookTitleHeading) {
+        bookTitleHeading.textContent = result.isBook ? 'おすすめの本' : 'おすすめのコンテンツ';
+    }
     
-    // クリック時にトラッキング
-    a.addEventListener('click', () => {
-        hasClickedLink = true;
-        trackClick(link.target);
+    // 購入リンクを表示
+    const purchaseLinksDiv = document.getElementById('purchaseLinks');
+    purchaseLinksDiv.innerHTML = '';
+
+    // 楽天・Amazon で販売している本の場合、書店情報を追加
+    if (result.links.some(link => link.target === '楽天市場' || link.target === 'Amazon')) {
+        const bookstoreNote = document.createElement('p');
+        bookstoreNote.textContent = '全国の書店さんでも販売中！';
+        bookstoreNote.style.textAlign = 'center';
+        bookstoreNote.style.fontSize = '14px';
+        bookstoreNote.style.color = '#7e3b28';
+        bookstoreNote.style.marginBottom = '15px';
+        bookstoreNote.style.fontWeight = '500';
+        purchaseLinksDiv.appendChild(bookstoreNote);
+    }
+
+    result.links.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.textContent = link.text;
+        a.className = 'purchase-link';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        
+        // クリック時にトラッキング
+        a.addEventListener('click', () => {
+            hasClickedLink = true;
+            trackClick(link.target);
+        });
+        
+        purchaseLinksDiv.appendChild(a);
     });
     
-    purchaseLinksDiv.appendChild(a);
-});
+    // 平日らくちん親子献立の場合、お買い物リストの案内を追加
+    if (result.shoppingListNote) {
+        const shoppingListDiv = document.createElement('div');
+        shoppingListDiv.style.marginTop = '20px';
+        shoppingListDiv.style.padding = '15px';
+        shoppingListDiv.style.backgroundColor = '#fbeee4';
+        shoppingListDiv.style.borderRadius = '12px';
+        shoppingListDiv.style.textAlign = 'center';
+        
+        const shoppingListText = document.createElement('p');
+        shoppingListText.innerHTML = '＼書籍とセットで持っていると、もっと便利！／<br><strong>チェックできるデジタルお買い物リストも販売中</strong>';
+        shoppingListText.style.fontSize = '14px';
+        shoppingListText.style.color = '#7e3b28';
+        shoppingListText.style.margin = '0';
+        shoppingListText.style.lineHeight = '1.6';
+        
+        shoppingListDiv.appendChild(shoppingListText);
+        purchaseLinksDiv.appendChild(shoppingListDiv);
+    }
+    
+    // 追加情報がある場合（完了期・幼児食フリージング）
+    if (result.additionalInfo) {
+        const additionalInfoDiv = document.createElement('div');
+        additionalInfoDiv.style.marginTop = '20px';
+        additionalInfoDiv.style.padding = '15px';
+        additionalInfoDiv.style.backgroundColor = '#ffffff';
+        additionalInfoDiv.style.border = '2px solid #dad48a';
+        additionalInfoDiv.style.borderRadius = '12px';
+        
+        const additionalInfoText = document.createElement('p');
+        additionalInfoText.textContent = result.additionalInfo;
+        additionalInfoText.style.fontSize = '14px';
+        additionalInfoText.style.color = '#7e3b28';
+        additionalInfoText.style.margin = '0';
+        additionalInfoText.style.lineHeight = '1.8';
+        additionalInfoText.style.whiteSpace = 'pre-line';
+        
+        additionalInfoDiv.appendChild(additionalInfoText);
+        purchaseLinksDiv.appendChild(additionalInfoDiv);
+    }
     
     // フッターのオンラインショップリンクもトラッキング
     const footerShopLink = document.getElementById('footerShopLink');
