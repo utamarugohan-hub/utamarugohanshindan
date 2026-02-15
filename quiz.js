@@ -137,8 +137,17 @@ function goBack() {
 
 // 診断結果ページへ移動
 function goToResult() {
+    console.log('goToResult 関数実行 - 現在の回答:', answers);
+    
     // 回答をlocalStorageに保存
-    localStorage.setItem('quizAnswers', JSON.stringify(answers));
+    try {
+        localStorage.setItem('quizAnswers', JSON.stringify(answers));
+        console.log('localStorage に保存成功');
+    } catch(e) {
+        console.error('localStorage に保存失敗:', e);
+        alert('localStorage に保存できませんでした。ブラウザのプライベートモードを解除してください。');
+        return;
+    }
     
     // 結果ページへ遷移
     window.location.href = 'result.html';
