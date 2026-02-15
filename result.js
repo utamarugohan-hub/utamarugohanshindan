@@ -145,18 +145,25 @@ let hasClickedLink = false;
 
 // ページ読み込み時に診断結果を表示
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('result.js: DOMContentLoaded イベント発火');
+    
     // localStorageから回答を取得
     const answersJson = localStorage.getItem('quizAnswers');
+    console.log('localStorage から取得したデータ:', answersJson);
+    
     if (!answersJson) {
+        console.error('診断データが見つかりません');
         alert('診断データが見つかりません。最初からやり直してください。');
         window.location.href = 'index.html';
         return;
     }
 
     const answers = JSON.parse(answersJson);
+    console.log('パースした回答データ:', answers);
     
     // 診断結果を決定
     const resultType = determineResult(answers);
+    console.log('決定した診断結果タイプ:', resultType);
     
     // 診断結果を表示
     displayResult(resultType);
